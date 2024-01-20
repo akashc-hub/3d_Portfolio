@@ -1,8 +1,36 @@
-import React from 'react'
+import { Suspense, useEffect, useState } from 'react';
+
+import { Canvas } from '@react-three/fiber';
+
+import { OrbitControls, Preload, useGLTF } from '@react-three/drei';
+
+import CanvasLoder from "../Loader";
 
 const Computers = () => {
+  const computer = useGLTF("./desktop_pc/scene.gltf")
+
   return (
-    <div>Computers</div>
+    <mesh>
+      <hemisphereLight intensity={0.15} groundColor="black"/>
+      <pintLight intensity={1} />
+      <primitive object={computer.scene}/>
+
+    </mesh>
+  )
+}
+
+const ComputersCanvas = () => {
+  return (
+    <Canvas
+      frameLoops="Demand"
+      shadows
+      camera={{positions: [10, 3, 5], fov: 25}}
+      gl={{ preserveDrawingBuffer: true }}>
+        <Suspense fallback={<CanvasLoder/>}>
+          <OrbitControls enableZoom={false} />
+
+        </Suspense>
+    </Canvas>
   )
 }
 
